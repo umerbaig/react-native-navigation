@@ -2,7 +2,6 @@ package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.reactnativenavigation.BaseTest;
 import com.reactnativenavigation.mocks.TopBarBackgroundViewCreatorMock;
@@ -22,31 +21,40 @@ import static org.mockito.Mockito.verify;
 public class TopBarControllerTest extends BaseTest {
 
     private TopBarController uut;
+    private TitleBar titleBar;
+    private TopBar topBar;
+    private Activity activity;
 
     @Override
     public void beforeEach() {
-        uut = new TopBarController();
-    }
-
-    @Test
-    public void clear() {
-        final TitleBar[] titleBar = new TitleBar[1];
+        activity = newActivity();
         uut = new TopBarController() {
-            @NonNull
             @Override
             protected TopBar createTopBar(Context context, TopBarBackgroundViewController topBarBackgroundViewController, StackLayout stackLayout) {
-                return new TopBar(context, topBarBackgroundViewController, stackLayout) {
+                topBar = spy(new TopBar(context, topBarBackgroundViewController, stackLayout) {
                     @Override
                     protected TitleBar createTitleBar(Context context) {
-                        titleBar[0] = spy(super.createTitleBar(context));
-                        return titleBar[0];
+                        titleBar = spy(super.createTitleBar(context));
+                        return titleBar;
                     }
-                };
+                });
+                return topBar;
             }
         };
         Activity activity = newActivity();
         uut.createView(activity, new TopBarBackgroundViewController(activity, new TopBarBackgroundViewCreatorMock()), Mockito.mock(StackLayout.class));
+    }
+
+    @Test
+    public void createView_setElevationToCancelDefaultElevationAnimationWhichMightConflictWithElevationValueFromDefaultOptions() {
+        uut.createView(activity, Mockito.mock(TopBarBackgroundViewController.class), Mockito.mock(StackLayout.class));
+        verify(topBar).setElevation(0);
+    }
+
+    @Test
+    public void clear() {
+        uut.createView(activity, Mockito.mock(TopBarBackgroundViewController.class), Mockito.mock(StackLayout.class));
         uut.clear();
-        verify(titleBar[0], times(1)).clear();
+        verify(titleBar, times(1)).clear();
     }
 }

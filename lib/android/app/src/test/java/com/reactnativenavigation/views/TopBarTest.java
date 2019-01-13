@@ -31,7 +31,7 @@ public class TopBarTest extends BaseTest {
     @SuppressWarnings("Convert2Lambda")
     @Override
     public void beforeEach() {
-        Activity activity = newActivity();
+        activity = newActivity();
         TopBarBackgroundViewController topBarBackgroundViewController = new TopBarBackgroundViewController(activity, new TopBarBackgroundViewCreatorMock());
         StackLayout parent = new StackLayout(activity, topBarBackgroundViewController, new TopBarController(), null);
         uut = new TopBar(activity, topBarBackgroundViewController, parent);

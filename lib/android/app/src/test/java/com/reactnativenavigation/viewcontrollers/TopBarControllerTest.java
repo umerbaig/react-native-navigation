@@ -2,7 +2,6 @@ package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.reactnativenavigation.BaseTest;
 import com.reactnativenavigation.mocks.TopBarBackgroundViewCreatorMock;
@@ -44,12 +43,6 @@ public class TopBarControllerTest extends BaseTest {
         };
         Activity activity = newActivity();
         uut.createView(activity, new TopBarBackgroundViewController(activity, new TopBarBackgroundViewCreatorMock()), Mockito.mock(StackLayout.class));
-    }
-
-    @Test
-    public void createView_setElevationToCancelDefaultElevationAnimationWhichMightConflictWithElevationValueFromDefaultOptions() {
-        uut.createView(activity, Mockito.mock(TopBarBackgroundViewController.class), Mockito.mock(StackLayout.class));
-        verify(topBar).setElevation(0);
     }
 
     @Test
